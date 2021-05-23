@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block head_title %} Register | {{ block.super }}{% endblock head_title %}
+
+{% block stylings %}
+    {% load static %}
+    <link href="{% static 'bookstore/css/register.css' %}" rel="stylesheet">
+{% endblock stylings %}
+
+{% block content %}
+    <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+        <div class="container">
+            <div class="card login-card">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="../../static/bookstore/img/sba_3.jpg" alt="login" class="login-card-img">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="brand-wrapper">
+                                <h2>AUS Online Bookstore</h2>
+                            </div>
+                            <p class="login-card-description">Create new Account</p>
+                            {% if messages %}
+                                {% for message in messages %}
+                               <div class="show-message" data-message="{{ message }}"></div>
+                                {% endfor %}
+                            {% endif %}
+
+                            <form method="POST" action="{% url 'customer_register' %}"
+                                  oninput='password2.setCustomValidity(password1.value !== password2.value ? "Passwords do not match." : "")'>
+                                <div id="alert_placeholder"></div>
+
+                                {% csrf_token %}
+                                {{ form.as_p }}
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <button class="btn btn-block login-btn mb-4" onclick="location.href = '/';">Go
+                                            to Login
+                                        </button>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <button class="btn btn-block login-btn mb-4" type="submit">Create Account
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    {% load static %}
+    <script>
+        //input
+        var form_fields = document.getElementsByTagName('input');
+
+        for (var field in form_fields) {
+            form_fields[field].className += 'form-control'
+        }
+
+        //drop down input
+        var drop_downs = document.getElementsByTagName('select');
+        for (var field in drop_downs) {
+            drop_downs[field].className += 'form-control'
+        }
+    </script>
+{% endblock script %}

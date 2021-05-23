@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ADHS</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {% load static %}
+    <link href="{% static 'bookstore/css/index.css' %}" rel="stylesheet">
+
+</head>
+<body>
+<div class="container" id="container">
+    <div class="form-container sign-in-container">
+        <form id="form" method="POST" action="">
+            <img src="/static/templates/img/aus_logo.jpg" width="350px">
+             <h3>Sign in</h3>
+             <div id="alert_placeholder"></div>
+            {% csrf_token %}
+            <input type="text" id="username" name="username" placeholder="Username" required/>
+            <input type="password" id="password" name="password" placeholder="Password" required/>
+
+            <a href="{% url 'customer_register' %}">Don't have an account ? Register here</a>
+
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+  	<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<button class="ghost" id="patientSignIn">Patient Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<button class="ghost" id="adminSignIn">Admin Sign In</button>
+			</div>
+		</div>
+</div>
+
+
+{% load static %}
+<script type="text/javascript" src="{% static 'bookstore/js/main.js' %}"></script>
+
+</body>
+</html>
+
