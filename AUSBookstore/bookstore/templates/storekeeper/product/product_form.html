@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block head_title %} Category | {{ block.super }}{% endblock head_title %}
+
+{#insert additional stylings#}
+{% block stylings %}
+    {% load static %}
+    <link href="{% static 'bookstore/css/form-styling.css' %}" rel="stylesheet">
+
+{% endblock stylings %}
+
+{% block content %}
+    {% include 'storekeeper/nav.html' %}
+
+
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="row">
+                                <div class="col-sm-12">
+                                    {% if update_category %}
+                                        <h1><b>Update Category</b></h1>
+                                    {% else %}
+                                        <h1><b>Add New Category</b></h1>
+                                    {% endif %}
+                                </div>
+            </div>
+            <hr>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="show-message" data-message="{{ message }}"></div>
+                {% endfor %}
+            {% endif %}
+
+            <form id="form" method="post" action="">
+            <div id="alert_placeholder"></div>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <div class="btn-container ">
+                <a href="{% url 'category_list' %}" class="btn btn-main-2 btn-round-full" id="cancel"><i
+                        class="material-icons button-icons">arrow_back</i><span>Cancel</span></a>
+                <button class="btn btn-main btn-round-full" type="submit">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block script %}
+    {% load static %}
+    <script>
+        //input
+        var form_fields = document.getElementsByTagName('input');
+
+        for (var field in form_fields) {
+            form_fields[field].className += 'form-control'
+        }
+
+    </script>
+{% endblock script %}
