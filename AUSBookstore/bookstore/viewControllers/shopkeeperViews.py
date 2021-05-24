@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from bookstore.models import Category
+from bookstore.models import Category, Product
 
 from bookstore.decorators import allowed_users, shopkeeper_only
 from bookstore.forms.productsForm import OrderForm
@@ -61,10 +61,14 @@ def delete_category(request, pk):
 
 
 def product_list(request):
-    return None
+    products = Product.objects.all()
+    context = {
+        "products": products
+    }
+    return render(request, 'storekeeper/product/product-table.html', context)
 
 def create_product(request):
-    return render(request, 'storekeeper/product_form.html')
+    return render(request, 'storekeeper/product/product_form.html')
 
 
 #orders
@@ -75,3 +79,6 @@ def order_list(request):
 def update_product(request):
     return None
 
+
+def delete_product(request):
+    return None

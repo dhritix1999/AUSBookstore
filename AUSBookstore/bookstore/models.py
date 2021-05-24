@@ -30,6 +30,9 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
 
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300)

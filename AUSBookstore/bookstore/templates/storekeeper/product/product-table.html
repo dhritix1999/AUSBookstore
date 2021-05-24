@@ -33,8 +33,12 @@
             <table id="dataTable" class="table table-striped table-hover">
                 <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Price</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -43,21 +47,25 @@
 
                     <tr>
                         <td>
-                            <img src="{{ product.image_url }}" alt="..." class="img-thumbnail">
+                            <img src="{{ product.image_url }}" alt="..." style="height: 50px" class="img-thumbnail">
                         </td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.description }}</td>
-                             <td>{{ product.stock }}</td>
-                             <td>{{ product.price }}</td>
-                             <td>{{ product.description }}</td>
+                        <td>
+                            {% for cat in product.category.all %}
+                                {{ cat }} |
+                            {% endfor %}
+                        </td>
+                        <td>{{ product.stock }}</td>
+                        <td>{{ product.price }}</td>
 
                         <td class="action">
                             <a href="{% url 'update_product' product.id %}" class="edit">
-                                <i class="material-icons"   title="Edit">&#xE254;</i>
+                                <i class="material-icons" title="Edit">&#xE254;</i>
                             </a>
                             <a href="{% url 'delete_product' pk=product.id %}" class="delete"
-                                                           data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{product.id }}">
-                                <i class="material-icons"  data-toggle="tooltip"  title="Delete">&#xE872;</i>
+                               data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{ product.id }}">
+                                <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
                             </a>
                         </td>
                     </tr>
@@ -68,20 +76,20 @@
         </div>
     </div>
 
-{% include 'confirm_delete.html' %}
+    {% include 'confirm_delete.html' %}
 
 {% endblock %}
 {% block script %}
     {% load static %}
     <script>
-     $(document).on('click', '.confirm-delete', function () {
-        $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
-      });
+        $(document).on('click', '.confirm-delete', function () {
+            $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
+        });
 
-    $(document).on('click', '#confirmDeleteButtonModal', function () {
-      var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
-      window.location = $("#".concat(caller)).attr("href");
-    });
+        $(document).on('click', '#confirmDeleteButtonModal', function () {
+            var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
+            window.location = $("#".concat(caller)).attr("href");
+        });
     </script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="{% static 'bookstore/js/data-table.js' %}"></script>

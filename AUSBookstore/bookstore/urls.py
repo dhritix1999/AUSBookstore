@@ -10,8 +10,8 @@ urlpatterns = [
     path('homepage/', authorizationViews.shopkeeper_homepage, name='home'),
     path('logout/', authorizationViews.logout_user, name='logout'),
 
-    #admin stuff
-    #category
+    # admin stuff
+    # category
     path('category/', shopkeeperViews.category_list, name='category_list'),
     path('category/create', shopkeeperViews.create_category, name='create_category'),
     path('category/<int:pk>/update/', shopkeeperViews.update_category, name='update_category'),
@@ -21,10 +21,9 @@ urlpatterns = [
     path('product/', shopkeeperViews.product_list, name='product_list'),
     path('product/create', shopkeeperViews.create_product, name='create_product'),
     path('product/<int:pk>/update', shopkeeperViews.update_product, name='update_product'),
+    path('product/<int:pk>/delete', shopkeeperViews.delete_product, name='delete_product'),
 
-    #view orders
+    # view orders
     path('order/', shopkeeperViews.order_list, name='order_list'),
-
-
 
 ]
