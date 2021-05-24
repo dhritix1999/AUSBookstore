@@ -26,23 +26,17 @@ class Storekeeper(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=300)
+
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
     image_url = models.CharField(max_length=2083)
     stock = models.IntegerField()
     price = models.FloatField()
-    department = models.CharField(max_length=100)
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=300)
-
-
-class ProductCategory(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category, blank=True)
 
 
 class Order(models.Model):

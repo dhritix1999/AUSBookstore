@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Login succesfull</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block head_title %} Home | {{ block.super }}{% endblock head_title %}
+
+{% block stylings %}
+    {% load static %}
+{% endblock stylings %}
+
+<h1>Heyy</h1>
+
+{% block content %}
+    {% include 'storekeeper/nav.html' %}
+
+{% endblock content%}
+
+{% block script %}
+      {% load static %}
+{% endblock script %}

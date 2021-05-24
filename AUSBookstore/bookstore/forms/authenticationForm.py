@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
-from .models import Customer, Storekeeper, User
+from bookstore.models import Customer, Storekeeper, User
 from django import forms
+from django.contrib.auth.models import Group
 
 COLLEGE_CHOICES = [
     ('CEN', 'CEN'),
@@ -63,6 +64,9 @@ class CustomerSignUpForm(UserCreationForm):
         customer.location_lng = self.cleaned_data.get('location_lng')
 
         customer.save()
+
+        user_group = Group.objects.get(name='customer')
+        user_group.user_set.add(user)
         return customer
 
 

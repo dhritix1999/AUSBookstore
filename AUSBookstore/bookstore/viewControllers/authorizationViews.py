@@ -1,19 +1,17 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth
-from bookstore.models import Category
-from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic import CreateView
-from bookstore.form import CustomerSignUpForm
-from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+from bookstore.decorators import unauthenticated_user, allowed_users, shopkeeper_only
+from bookstore.forms.authenticationForm import CustomerSignUpForm
 
 
 # Create your views here.
 
 # user login
+@unauthenticated_user
 def login_request(request):
-
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -25,12 +23,13 @@ def login_request(request):
             return redirect('home')
         else:
             messages.info(request, 'Username OR password is incorrect')
+            return render(request, 'index.html')
     context = {}
     return render(request, 'index.html', context)
 
 
+@unauthenticated_user
 def register(request):
-
     if request.method == 'POST':
         form = CustomerSignUpForm(request.POST)
         if form.is_valid():
@@ -44,22 +43,17 @@ def register(request):
     return render(request, 'customer/register.html', context)
 
 
-class customer_register(CreateView):
-    model = User
-    form_class = CustomerSignUpForm
-    template_name = 'customer/register.html'
+@login_required(login_url='login')
+@shopkeeper_only
+def shopkeeper_homepage(request):
+    return render(request, 'storekeeper/homepage.html')
 
-    def validation(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('/')
-
-
-def homepage(request):
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def customer_homepage(request):
     return render(request, 'storekeeper/homepage.html')
 
 
-
-def logout_view(request):
+def logout_user(request):
     logout(request)
-    return redirect('/')
+    return redirect('login')
