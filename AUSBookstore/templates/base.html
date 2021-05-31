@@ -17,11 +17,15 @@
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <!-- Table Styling -->
+    {% block table-stylings %}
+
+    {% endblock table-stylings %}
+
     <!-- Optional Styling -->
     {% block stylings %}
 
     {% endblock stylings %}
-
 
     <!-- Custom CSS -->
     {% load static %}
@@ -46,6 +50,11 @@
 {% block script %}
 
 {% endblock script %}
+
+<!-- Table Scripts -->
+{% block table-scripts %}
+
+{% endblock table-scripts %}
 
 </body>
 
