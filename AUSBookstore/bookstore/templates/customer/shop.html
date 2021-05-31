@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block head_title %} Shop | {{ block.super }}{% endblock head_title %}
+
+{#insert additional stylings#}
+{% block stylings %}
+    {% load static %}
+    <script type="text/javascript">
+        var user = '{{request.user}}'
+
+        function getToken(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getToken('csrftoken')
+
+        function getCookie(name) {
+            // Split cookie string and get all individual name=value pairs in an array
+            var cookieArr = document.cookie.split(";");
+
+            // Loop through the array elements
+            for (var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+
+                /* Removing whitespace at the beginning of the cookie name
+                and compare it with the given string */
+                if (name == cookiePair[0].trim()) {
+                    // Decode the cookie value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+
+            // Return null if not found
+            return null;
+        }
+
+        var cart = JSON.parse(getCookie('cart'))
+
+        if (cart == undefined) {
+            cart = {}
+            console.log('Cart Created!', cart)
+            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+        }
+        console.log('Cart:', cart)
+    </script>
+{% endblock stylings %}
+
+{% block content %}
+    {% include 'customer/nav.html' %}
+
+    <div class="position-relative overflow-hidden text-center bg-light"
+         style="background: rgba(0, 0, 0, 0) url(../../../static/bookstore/img/2.jpg) no-repeat scroll center center / cover ;">
+        <div class="col-md-5 p-lg-5 mx-auto my-5">
+            <h2 class="bradcaump-title">Shop</h2>
+        </div>
+    </div>
+
+    <div class="container">
+        <form class="form-inline" method="POST" action="{% url 'search_store' %}">
+             {% csrf_token %}
+            <input class="form-control mr-sm-2" name="searched" id="searched" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <div class="row">
+            {% for product in products %}
+                <div class="col-lg-4">
+                    <img class="thumbnail" src="{{ product.image_url }}">
+                    <div class="box-element product">
+                        <h6><strong>{{ product.name }}</strong></h6>
+                        <hr>
+
+                        <button data-product="{{ product.id }}" data-action="add"
+                                class="btn btn-outline-secondary add-btn update-cart">Add to Cart
+                        </button>
+
+                        <a class="btn btn-outline-info" href="#">View</a>
+                        <h4 style="display: inline-block; float: right"><strong>DHS {{ product.price }}</strong></h4>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block script %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'bookstore/js/cart.js' %}"></script>
+{% endblock script %}
