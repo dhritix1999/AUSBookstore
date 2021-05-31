@@ -21,3 +21,13 @@ var messages = document.getElementsByClassName('show-message')
 for (var i = 0; i < messages.length; i++) {
     showalert(messages[i].getAttribute('data-message'), 'alert-info')
 }
+
+
+  $(document).on('click', '.delete', function () {
+        $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
+      });
+
+    $(document).on('click', '#confirmDeleteButtonModal', function () {
+      var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
+      window.location = $("#".concat(caller)).attr("href");
+    });
