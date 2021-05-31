@@ -2,10 +2,15 @@
 {% block head_title %} Category | {{ block.super }}{% endblock head_title %}
 
 {#insert additional stylings#}
+{% block table-stylings %}
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <link href="{% static 'bookstore/css/data-table.css' %}" rel="stylesheet">
+{% endblock table-stylings %}
+
 {% block stylings %}
     {% load static %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-    <link href="{% static 'bookstore/css/data-table.css' %}" rel="stylesheet">
     <style>
         .action i {
             font-size: 30px;
@@ -26,8 +31,8 @@
     {#                </nav>#}
     {#        </div>#}
     {#    </div>#}
-
-    <div class="container">
+  <div class="container-xl">
+        <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -59,7 +64,7 @@
                             <a href="{% url 'update_category' category.id %}" class="edit">
                                 <i class="material-icons"   title="Edit">&#xE254;</i>
                             </a>
-                            <a href="{% url 'delete_category' pk=category.id %}" class="delete"
+                            <a href="{% url 'delete_category' pk=category.id %}" class="delete" title="Delete"
                                                            data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{category.id }}">
                                 <i class="material-icons"  data-toggle="tooltip"  title="Delete">&#xE872;</i>
                             </a>
@@ -70,23 +75,17 @@
                 </tbody>
             </table>
         </div>
+        </div>
     </div>
 
-{% include 'confirm_delete.html' %}
+{% include 'confirm-delete.html' %}
 
 {% endblock %}
-{% block script %}
-    {% load static %}
-    <script>
-     $(document).on('click', '.confirm-delete', function () {
-        $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
-      });
 
-    $(document).on('click', '#confirmDeleteButtonModal', function () {
-      var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
-      window.location = $("#".concat(caller)).attr("href");
-    });
-    </script>
+<!-- Table Scripts -->
+{% block table-scripts %}
+  {% load static %}
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript" src="{% static 'bookstore/js/data-table.js' %}"></script>
-{% endblock script %}
+{% endblock table-scripts %}
