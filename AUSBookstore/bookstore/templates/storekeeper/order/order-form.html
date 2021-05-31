@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block head_title %} Order | {{ block.super }}{% endblock head_title %}
+
+{#insert additional stylings#}
+{% block stylings %}
+    {% load static %}
+    <link href="{% static 'bookstore/css/form-styling.css' %}" rel="stylesheet">
+
+{% endblock stylings %}
+
+{% block content %}
+    {% include 'storekeeper/nav.html' %}
+
+
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1><b>Order #{{ order.id }}</b></h1>
+                </div>
+            </div>
+            <hr>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="show-message" data-message="{{ message }}"></div>
+                {% endfor %}
+            {% endif %}
+
+
+            <br>
+            <table class="table">
+                <tr>
+                    <th><h5><strong>User:</strong>{{ order.user }}</h5></th>
+                    <th><h5><strong>Date Ordered:</strong>{{ order.date_ordered }}</h5></th>
+                    <th><h5><strong>Location:</strong> <a
+                            href="https://www.google.com/maps/search/?api=1&query={{ order.location_lat }},{{ order.location_lng }}"
+                            target="_blank" title="Location"
+                            class="location"><i class="material-icons md-30"
+                                                style="color: darkblue">&#xe55f;</i></a></h5></th>
+                    <th><h5><strong>Total :</strong>AED {{ order.price|floatformat:2 }}</h5></th>
+                </tr>
+            </table>
+            <form id="form" method="post" action="{% url 'update_order_status' order.id %}">
+                {% csrf_token %}
+                <div style="width: 25%;">
+                    <h5></h5><strong>{{ form.status.label_tag }}</strong></h5>
+                    {{ form.status }}
+                </div>
+                <br>
+                <button class="btn btn-main btn-round-full" type="submit">Update</button>
+            </form>
+        </div>
+
+
+        <br>
+        <div class="box-element">
+            <div class="cart-row">
+                <div style="flex:2"></div>
+                <div style="flex:2"><strong>Item</strong></div>
+                <div style="flex:1"><strong>Price</strong></div>
+                <div style="flex:1"><strong>Quantity</strong></div>
+                <div style="flex:1"><strong>Total</strong></div>
+            </div>
+            {% for item in items %}
+                <div class="cart-row">
+                    <div style="flex:2"><img class="row-image" src="{{ item.product.image_url }}"></div>
+                    <div style="flex:2"><p>{{ item.product.name }}</p></div>
+                    <div style="flex:1"><p>AED {{ item.item_price|floatformat:2 }}</p></div>
+                    <div style="flex:1"><p>{{ item.item_quantity }}</p></div>
+                    <div style="flex:1"><p>AED {{ item.get_total|floatformat:2 }}</p></div>
+                </div>
+            {% endfor %}
+            <div class="btn-container ">
+                <a href="{% url 'order_list' %}" class="btn btn-main-2 btn-round-full" id="cancel"><i
+                        class="material-icons button-icons">arrow_back</i><span>Cancel</span></a>
+            </div>
+        </div>
+
+        </form>
+    </div>
+    </div>
+
+
+{% endblock %}
+{% block script %}
+    {% load static %}
+    <script>
+        //drop down input
+        var drop_downs = document.getElementsByTagName('select');
+        for (var field in drop_downs) {
+            drop_downs[field].className += 'form-control'
+        }
+    </script>
+{% endblock script %}
