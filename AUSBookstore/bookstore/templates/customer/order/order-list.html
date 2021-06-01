@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block head_title %} Orders | {{ block.super }}{% endblock head_title %}
+
+{#insert additional stylings#}
+{% block table-stylings %}
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <link href="{% static 'bookstore/css/data-table.css' %}" rel="stylesheet">
+{% endblock table-stylings %}
+
+{% block stylings %}
+    {% load static %}
+    <style>
+        .action i {
+            font-size: 30px;
+        }
+    </style>
+{% endblock stylings %}
+
+{% block content %}
+    {% include 'customer/nav.html' %}
+
+
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h2><b>Your Orders</b></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-body">
+                            <form method="get">
+                                {{ myFilter.form }}
+                                <button class="btn btn-secondary" type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <table id="dataTable" class="table table-striped table-hover">
+                    <thead style="white-space: nowrap">
+                    <tr>
+                        <th>Order Id</th>
+                        <th>User</th>
+                        <th>Date Ordered</th>
+                        <th>Location</th>
+                        <th>Total Price (AED)</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.user }}</td>
+                            <td>{{ order.date_ordered }}</td>
+                            <td>
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ order.location_lat }},{{ order.location_lng }}"
+                                   target="_blank" title="Location"
+                                   class="location"><i class="material-icons md-30" style="color: darkblue">&#xe55f;</i></a>
+                            </td>
+                            <td>{{ order.price }}</td>
+                            <td>{{ order.status }}</td>
+                            <td style="  display: flex;  justify-content: center;">
+                                <a class="btn btn-outline-info"
+                                   href="{% url 'view_your_order' order.id %}" role="button">View</a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% include 'confirm-delete.html' %}
+
+{% endblock %}
+
+<!-- Table Scripts -->
+{% block table-scripts %}
+    {% load static %}
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="{% static 'bookstore/js/data-table.js' %}"></script>
+{% endblock table-scripts %}

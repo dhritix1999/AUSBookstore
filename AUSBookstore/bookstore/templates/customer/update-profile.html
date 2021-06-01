@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block head_title %} Profile | {{ block.super }}{% endblock head_title %}
+
+{#insert additional stylings#}
+{% block stylings %}
+    {% load static %}
+    <link href="{% static 'bookstore/css/form-styling.css' %}" rel="stylesheet">
+
+{% endblock stylings %}
+
+{% block content %}
+    {% include 'customer/nav.html' %}
+
+
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                        <h1><b>Update Profile</b></h1>
+                </div>
+            </div>
+            <hr>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="show-message" data-message="{{ message }}"></div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form id="form" method="post" action=""  oninput='password2.setCustomValidity(password1.value !== password2.value ? "Passwords do not match." : "")'>
+                        <div id="alert_placeholder"></div>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <div class="btn-container ">
+                            <button class="btn btn-main btn-round-full" type="submit">Submit</button>
+                        </div>
+                    </form>
+
+
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block script %}
+    {% load static %}
+    <script>
+        //input
+        var form_fields = document.getElementsByTagName('input');
+
+        for (var field in form_fields) {
+            form_fields[field].className += 'form-control'
+        }
+
+        var multi_select = document.getElementsByTagName('select');
+        for (var select in multi_select) {
+            multi_select[select].className += 'custom-select browser-default'
+            multi_select[select].setAttribute("multiple", "")
+        }
+
+    </script>
+{% endblock script %}
